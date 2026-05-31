@@ -6,6 +6,7 @@ import { User } from "./models/User";
 import { generateTestUser } from "./utils";
 import { State } from "./state";
 import { authUser } from "./services/auth";
+import "./styles/kanban.css";
 
 export const appState = new State();
 

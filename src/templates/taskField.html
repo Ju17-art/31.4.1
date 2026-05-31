@@ -1,1 +1,155 @@
-<h1>Your tasks here</h1>
+<main class="board">
+  <!-- HEADER -->
+  <header class="board__header">
+    <h1 class="board__title">Awesome Kanban Board</h1>
+
+    <nav class="user-menu" aria-label="Меню пользователя">
+      <button
+        class="user-menu__trigger"
+        type="button"
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-controls="user-menu-list"
+      >
+        <span class="user-menu__avatar"></span>
+
+        <span class="user-menu__arrow"></span>
+      </button>
+
+      <ul class="user-menu__dropdown" id="user-menu-list">
+        <li class="user-menu__item">
+          <button class="user-menu__action" type="button">Profile</button>
+        </li>
+
+        <li class="user-menu__item">
+          <button class="user-menu__action" type="button">Log Out</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- BOARD COLUMNS -->
+  <section class="board__content" aria-label="Kanban board">
+    <ul class="board__columns">
+      <!-- BACKLOG -->
+      <li class="board__column">
+        <section class="column">
+          <h2 class="column__title">Backlog</h2>
+
+          <ul class="task-list">
+            <li class="task-list__item">
+              <article class="task-card">
+                Login page — performance issues
+              </article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Sprint bugfix</article>
+            </li>
+          </ul>
+
+          <button class="add-card-button add-card-button--active" type="button">
+            + Add card
+          </button>
+        </section>
+      </li>
+
+      <!-- READY -->
+      <li class="board__column">
+        <section class="column">
+          <h2 class="column__title">Ready</h2>
+
+          <ul class="task-list">
+            <li class="task-list__item">
+              <article class="task-card">
+                Shop page — performance issues
+              </article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Checkout bugfix</article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Shop bug 1</article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Shop bug 2</article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Shop bug 3</article>
+            </li>
+          </ul>
+
+          <button
+            class="add-card-button add-card-button--disabled"
+            type="button"
+            disabled
+          >
+            + Add card
+          </button>
+        </section>
+      </li>
+
+      <!-- IN PROGRESS -->
+      <li class="board__column">
+        <section class="column">
+          <h2 class="column__title">In Progress</h2>
+
+          <ul class="task-list">
+            <li class="task-list__item">
+              <article class="task-card">
+                User page — performance issues
+              </article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Auth bugfix</article>
+            </li>
+          </ul>
+
+          <button class="add-card-button add-card-button--active" type="button">
+            + Add card
+          </button>
+        </section>
+      </li>
+
+      <!-- FINISHED -->
+      <li class="board__column">
+        <section class="column">
+          <h2 class="column__title">Finished</h2>
+
+          <ul class="task-list">
+            <li class="task-list__item">
+              <article class="task-card">
+                Main page — performance issues
+              </article>
+            </li>
+
+            <li class="task-list__item">
+              <article class="task-card">Main page bugfix</article>
+            </li>
+          </ul>
+
+          <button class="add-card-button add-card-button--active" type="button">
+            + Add card
+          </button>
+        </section>
+      </li>
+    </ul>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="board__footer">
+    <div class="board__stats">
+      <span>Active tasks: &lt;N&gt;</span>
+      <span>Finished tasks: &lt;M&gt;</span>
+    </div>
+
+    <div class="board__copyright">
+      Kanban board by &lt;NAME&gt;, &lt;YEAR&gt;
+    </div>
+  </footer>
+</main>
