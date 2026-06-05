@@ -62,6 +62,7 @@ function addTask(title, status, userId = "test") {
 
 function initButtons() {
   console.log("initButtons вызвана");
+
   document.querySelectorAll(".add-card-button").forEach((button) => {
     // удаляем старый обработчик
     if (button._addHandler)
@@ -94,27 +95,27 @@ function initButtons() {
 
       input.focus();
 
+      // Функция сохранения задачи
       const saveHandler = () => {
-        console.log("saveHandler сработал");
-
         const title = input.value.trim();
-        console.log("title =", title);
-        console.log("status =", status);
-
         if (!title) return;
 
-        addTask(title, status);
+        const newTask = new Task(title, status, "test"); // userId можно менять
+        Task.save(newTask);
 
-        console.log("после addTask");
+        renderTasks(); // обновляем доску
+        initButtons(); // переинициализируем кнопки
 
         form.remove();
-        btn.style.display = "";
+        btn.style.display = ""; // показываем кнопку обратно
       };
 
+      // События для сохранения
       saveBtn.addEventListener("click", saveHandler);
       input.addEventListener("keypress", (e) => {
         if (e.key === "Enter") saveHandler();
       });
+      input.addEventListener("blur", saveHandler); // сохраняем при уходе фокуса
     };
 
     button.addEventListener("click", handler);
@@ -130,6 +131,8 @@ loginForm.addEventListener("submit", (e) => {
   const password = loginForm.querySelector("[name='password']").value;
 
   if (authUser(login, password)) {
+    Task.getAll();
+
     // Вставляем шаблон канбан-доски
     document.querySelector("#content").innerHTML = taskFieldTemplate;
 
