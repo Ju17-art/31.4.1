@@ -36,10 +36,21 @@ export class Task {
   // ===== Обновить статус =====
   static updateStatus(taskId, newStatus) {
     const tasks = Task.getAll();
-    const task = tasks.find((t) => t.id === taskId);
 
-    if (task) {
+    const index = tasks.findIndex((t) => t.id === taskId);
+
+    if (index !== -1) {
+      const task = tasks[index];
+
+      // удаляем из старого места
+      tasks.splice(index, 1);
+
+      // меняем статус
       task.status = newStatus;
+
+      // кладём в конец массива
+      tasks.push(task);
+
       localStorage.setItem("tasks", JSON.stringify(tasks));
     }
   }
