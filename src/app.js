@@ -20,7 +20,12 @@ generateTestUser(User);
 
 // ====== Рендер задач ======
 function renderTasks() {
-  const tasks = Task.getAll(); // всегда массив
+  const allTasks = Task.getAll();
+
+  const tasks =
+    appState.currentUser?.role === "admin"
+      ? allTasks
+      : allTasks.filter((task) => task.userId === appState.currentUser?.login);
 
   // очищаем все списки
   document
@@ -95,11 +100,11 @@ function updateAddButtonState() {
 }
 
 // ====== Добавление задачи ======
-function addTask(title, status, userId = "test") {
+function addTask(title, status, userId = appState.currentUser.login) {
   const newTask = new Task(title, status, userId);
   Task.save(newTask);
   renderTasks();
-  initButtons(); // переинициализация кнопок
+  initButtons();
 }
 
 // ====== Кнопки + Add с дропдаунами ======
@@ -145,7 +150,7 @@ function initButtons() {
         const saveHandler = () => {
           const title = input.value.trim();
           if (!title) return;
-          const newTask = new Task(title, status, "test");
+          const newTask = new Task(title, status, appState.currentUser.login);
           Task.save(newTask);
           renderTasks();
           initButtons();
@@ -212,8 +217,6 @@ loginForm.addEventListener("submit", (e) => {
   const password = loginForm.querySelector("[name='password']").value;
 
   if (authUser(login, password)) {
-    Task.getAll();
-
     // Вставляем шаблон канбан-доски
     document.querySelector("#content").innerHTML = taskFieldTemplate;
 
@@ -221,6 +224,18 @@ loginForm.addEventListener("submit", (e) => {
     renderTasks();
 
     initButtons();
+
+    // ===== User Menu =====
+    const userMenuBtn = document.querySelector(".user-menu__trigger");
+    const userMenuList = document.querySelector(".user-menu__dropdown");
+    const arrow = userMenuBtn.querySelector(".user-menu__arrow");
+
+    userMenuBtn.addEventListener("click", () => {
+      const isOpen = userMenuList.style.display === "block";
+      userMenuList.style.display = isOpen ? "none" : "block";
+
+      arrow.style.transform = isOpen ? "rotate(-45deg)" : "rotate(135deg)";
+    });
   } else {
     document.querySelector("#content").innerHTML = noAccessTemplate;
   }

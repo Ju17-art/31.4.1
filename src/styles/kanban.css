@@ -89,9 +89,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/*
 .user-menu:hover .user-menu__dropdown {
   display: block;
 }
+*/
 
 .user-menu__action {
   width: 100%;
