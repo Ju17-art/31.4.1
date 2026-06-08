@@ -1,0 +1,60 @@
+<main class="board">
+  <!-- HEADER -->
+  <header class="board__header">
+    <h1 class="board__title">Awesome Kanban Board</h1>
+
+    <nav class="user-menu" aria-label="Меню пользователя">
+      <button
+        class="user-menu__trigger"
+        type="button"
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-controls="user-menu-list"
+      >
+        <span class="user-menu__avatar"></span>
+
+        <span class="user-menu__arrow"></span>
+      </button>
+
+      <ul class="user-menu__dropdown" id="user-menu-list">
+        <li class="user-menu__item">
+          <button class="user-menu__action" type="button">Profile</button>
+        </li>
+
+        <li class="user-menu__item">
+          <button class="user-menu__action" type="button">Log Out</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <section class="board__content" aria-label="Kanban board"></section>
+  <article class="task-details">
+    <div class="task-details__header">
+      <h2 id="task-title" class="task-details__title"></h2>
+      <button class="task-details__close" aria-label="Close task details">
+        ✕
+      </button>
+    </div>
+
+    <div class="task-details__content">
+      <textarea id="task-description" placeholder="Описание задачи"></textarea>
+    </div>
+
+    <div class="task-details__actions">
+      <button class="task-details__save">Save</button>
+      <button class="task-details__delete">Delete</button>
+    </div>
+  </article>
+  </section>
+  <!-- FOOTER -->
+  <footer class="board__footer">
+    <div class="board__stats">
+      <span>Active tasks: <span id="active-tasks-count">0</span></span>
+      <span>Finished tasks: <span id="finished-tasks-count">0</span></span>
+    </div>
+
+    <div class="board__copyright">
+      Kanban board by &lt;NAME&gt;, &lt;YEAR&gt;
+    </div>
+  </footer>
+</main>

@@ -1,11 +1,12 @@
 import { v4 as uuid } from "uuid";
 
 export class Task {
-  constructor(title, status, userId) {
+  constructor(title, status, userId, description = "") {
     this.id = uuid();
     this.title = title;
     this.status = status;
     this.userId = userId;
+    this.description = description;
   }
 
   // ===== Получить все задачи =====
@@ -51,6 +52,18 @@ export class Task {
       // кладём в конец массива
       tasks.push(task);
 
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  }
+
+  // ===== Обновить описание =====
+  static updateDescription(taskId, description) {
+    const tasks = Task.getAll();
+
+    const task = tasks.find((t) => t.id === taskId);
+
+    if (task) {
+      task.description = description;
       localStorage.setItem("tasks", JSON.stringify(tasks));
     }
   }

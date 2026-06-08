@@ -10,6 +10,7 @@ import { generateTestUser } from "./utils";
 import { State } from "./state";
 import { authUser } from "./services/auth";
 import { Task } from "./models/Task";
+import taskDetailsTemplate from "./templates/taskDetails.html";
 
 export const appState = new State();
 
@@ -40,7 +41,13 @@ function renderTasks() {
     if (container) {
       const li = document.createElement("li");
       li.className = "task-list__item";
-      li.innerHTML = `<article class="task-card">${task.title}</article>`;
+
+      const card = document.createElement("article");
+      card.className = "task-card";
+      card.dataset.taskId = task.id; // <-- вот это добавляем
+      card.textContent = task.title;
+
+      li.appendChild(card);
       container.appendChild(li);
     }
   });
@@ -56,8 +63,76 @@ function renderTasks() {
 
   // Обновляем состояние кнопок
   updateAddButtonState();
+
+  // <-- добавляем навешивание обработчиков карточек прямо здесь
+  initTaskCards();
 }
 
+function initTaskCards() {
+  document.querySelectorAll(".task-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const taskId = card.dataset.taskId;
+      const task = Task.getAll().find((t) => t.id === taskId);
+
+      // Загружаем шаблон страницы задачи
+      document.querySelector("#content").innerHTML = taskDetailsTemplate;
+
+      const active = Task.getAll().filter((t) => t.status === "backlog").length;
+
+      const finished = Task.getAll().filter(
+        (t) => t.status === "finished",
+      ).length;
+
+      document.getElementById("active-tasks-count").textContent = active;
+      document.getElementById("finished-tasks-count").textContent = finished;
+
+      // Подставляем данные задачи
+      document.querySelector("#task-title").textContent = task.title;
+
+      document.querySelector("#task-description").value =
+        task.description || "";
+
+      document.querySelector("#task-description").focus();
+
+      // Закрыть
+      document
+        .querySelector(".task-details__close")
+        .addEventListener("click", () => {
+          document.querySelector("#content").innerHTML = taskFieldTemplate;
+
+          renderTasks();
+          initButtons();
+          initTaskCards(); // <-- навесили клики снова
+        });
+
+      // Сохранить описание
+      document
+        .querySelector(".task-details__save")
+        .addEventListener("click", () => {
+          const description = document.querySelector("#task-description").value;
+
+          Task.updateDescription(task.id, description);
+
+          alert("Описание сохранено!");
+        });
+
+      // Удалить задачу
+      document
+        .querySelector(".task-details__delete")
+        .addEventListener("click", () => {
+          if (confirm(`Удалить задачу "${task.title}"?`)) {
+            Task.delete(task.id);
+
+            document.querySelector("#content").innerHTML = taskFieldTemplate;
+
+            renderTasks();
+            initButtons();
+            initTaskCards(); // <-- навесили клики снова
+          }
+        });
+    });
+  });
+}
 // ====== Обновление состояния кнопок ======
 function updateAddButtonState() {
   const setButtonState = (button, enabled) => {
@@ -139,8 +214,7 @@ function initButtons() {
 
       // Для Backlog — обычная форма
       if (status === "backlog") {
-        form.innerHTML = `
-          <input type="text" class="add-card-input" placeholder="Название задачи" />
+        form.innerHTML = `<input type="text" class="add-card-input" placeholder="Название задачи" />
           <button class="submit-card-btn">Submit</button>
         `;
         const input = form.querySelector(".add-card-input");
@@ -222,7 +296,6 @@ loginForm.addEventListener("submit", (e) => {
 
     // Рендерим существующие задачи
     renderTasks();
-
     initButtons();
 
     // ===== User Menu =====
