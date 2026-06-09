@@ -4,13 +4,14 @@ import "./styles/kanban.css";
 
 import taskFieldTemplate from "./templates/taskField.html";
 import noAccessTemplate from "./templates/noAccess.html";
+import taskDetailsTemplate from "./templates/taskDetails.html";
+import usersAdminTemplate from "./templates/usersAdmin.html";
 
 import { User } from "./models/User";
 import { generateTestUser } from "./utils";
 import { State } from "./state";
 import { authUser } from "./services/auth";
 import { Task } from "./models/Task";
-import taskDetailsTemplate from "./templates/taskDetails.html";
 
 export const appState = new State();
 
@@ -133,6 +134,66 @@ function initTaskCards() {
     });
   });
 }
+
+function renderUsers() {
+  const tbody = document.querySelector("#users-list");
+
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  User.getAll().forEach((user) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${user.login}</td>
+      <td>${user.role}</td>
+      <td>
+        ${
+          user.login !== "admin"
+            ? `<button class="delete-user-btn" data-login="${user.login}">Delete</button>`
+            : ""
+        }
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+
+  document.querySelectorAll(".delete-user-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const login = btn.dataset.login;
+
+      if (confirm(`Удалить пользователя ${login}?`)) {
+        User.delete(login);
+        renderUsers();
+      }
+    });
+  });
+}
+
+function initUsersAdmin() {
+  renderUsers();
+
+  document.querySelector("#add-user-btn").addEventListener("click", () => {
+    const login = prompt("Логин");
+
+    if (!login) return;
+
+    const password = prompt("Пароль");
+
+    if (!password) return;
+
+    const role = prompt("Роль (user/admin)", "user");
+
+    const user = new User(login, password, role || "user");
+
+    User.save(user);
+
+    renderUsers();
+  });
+}
+
 // ====== Обновление состояния кнопок ======
 function updateAddButtonState() {
   const setButtonState = (button, enabled) => {
@@ -303,12 +364,35 @@ loginForm.addEventListener("submit", (e) => {
     const userMenuList = document.querySelector(".user-menu__dropdown");
     const arrow = userMenuBtn.querySelector(".user-menu__arrow");
 
+    if (appState.currentUser.role === "admin") {
+      userMenuList.insertAdjacentHTML(
+        "afterbegin",
+        `
+      <li class="user-menu__item">
+        <button id="users-admin-btn" class="user-menu__action">
+          Users
+        </button>
+      </li>
+    `,
+      );
+    }
+
     userMenuBtn.addEventListener("click", () => {
       const isOpen = userMenuList.style.display === "block";
       userMenuList.style.display = isOpen ? "none" : "block";
 
       arrow.style.transform = isOpen ? "rotate(-45deg)" : "rotate(135deg)";
     });
+
+    const usersBtn = document.querySelector("#users-admin-btn");
+
+    if (usersBtn) {
+      usersBtn.addEventListener("click", () => {
+        document.querySelector("#content").innerHTML = usersAdminTemplate;
+
+        initUsersAdmin();
+      });
+    }
   } else {
     document.querySelector("#content").innerHTML = noAccessTemplate;
   }

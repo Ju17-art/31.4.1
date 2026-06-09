@@ -26,4 +26,13 @@ export class User extends BaseModel {
       throw new Error(e);
     }
   }
+
+  static getAll() {
+    return getFromStorage("users");
+  }
+
+  static delete(login) {
+    const users = User.getAll().filter((u) => u.login !== login);
+    localStorage.setItem("users", JSON.stringify(users));
+  }
 }

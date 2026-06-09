@@ -315,3 +315,26 @@
 .task-details__delete {
   background-color: #dc3545;
 }
+
+.users-table {
+  width: 100%;
+  background: white;
+  color: black;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.delete-user-btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background: #dc3545;
+  color: white;
+  cursor: pointer;
+}
