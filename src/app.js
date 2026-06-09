@@ -78,11 +78,15 @@ function initTaskCards() {
       // Загружаем шаблон страницы задачи
       document.querySelector("#content").innerHTML = taskDetailsTemplate;
 
-      const active = Task.getAll().filter((t) => t.status === "backlog").length;
+      const allTasks = Task.getAll();
 
-      const finished = Task.getAll().filter(
-        (t) => t.status === "finished",
-      ).length;
+      const tasks =
+        appState.currentUser?.role === "admin"
+          ? allTasks
+          : allTasks.filter((t) => t.userId === appState.currentUser?.login);
+
+      const active = tasks.filter((t) => t.status === "backlog").length;
+      const finished = tasks.filter((t) => t.status === "finished").length;
 
       document.getElementById("active-tasks-count").textContent = active;
       document.getElementById("finished-tasks-count").textContent = finished;
