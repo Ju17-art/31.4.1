@@ -10,7 +10,7 @@
   <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">SimpleTODO</a>
+        <a class="navbar-brand" href="#">SimpleTODO123</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -25,9 +25,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="#"
+                >Home123</a
+              >
             </li>
           </ul>
+
+          <!-- Панель пользователя (изначально скрыта) -->
+          <div id="user-panel" class="align-items-center me-3">
+            <span id="user-greeting" class="text-white me-3"></span>
+            <button id="logout-btn" class="btn btn-outline-info" type="button">
+              Sign Out
+            </button>
+          </div>
+
+          <!-- Форма входа -->
           <form id="app-login-form" class="d-flex">
             <input
               class="form-control me-2"
@@ -56,8 +68,11 @@
         </div>
       </div>
     </nav>
-    <div class="container">
+
+    <div class="container mt-4">
       <p id="content">Please Sign In to see your tasks!</p>
     </div>
+
+    <script src="app.js"></script>
   </body>
 </html>

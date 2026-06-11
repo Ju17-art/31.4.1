@@ -1,3 +1,7 @@
 #app-login-btn {
   width: 160px;
 }
+
+#user-panel {
+  display: none;
+}

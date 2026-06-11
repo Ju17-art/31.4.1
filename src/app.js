@@ -3,7 +3,6 @@ import "./styles/style.css";
 import "./styles/kanban.css";
 
 import taskFieldTemplate from "./templates/taskField.html";
-import noAccessTemplate from "./templates/noAccess.html";
 import taskDetailsTemplate from "./templates/taskDetails.html";
 import usersAdminTemplate from "./templates/usersAdmin.html";
 
@@ -117,8 +116,6 @@ function initTaskCards() {
           const description = document.querySelector("#task-description").value;
 
           Task.updateDescription(task.id, description);
-
-          alert("Описание сохранено!");
         });
 
       // Удалить задачу
@@ -356,48 +353,76 @@ loginForm.addEventListener("submit", (e) => {
   const password = loginForm.querySelector("[name='password']").value;
 
   if (authUser(login, password)) {
+    // Скрываем форму входа
+    loginForm.classList.add("d-none");
+
+    // Показываем панель пользователя
+    const userPanel = document.getElementById("user-panel");
+    userPanel.style.display = "flex";
+
+    // Подставляем имя пользователя
+    document.getElementById("user-greeting").textContent =
+      `Здравствуйте, ${appState.currentUser.login}`;
+
     // Вставляем шаблон канбан-доски
     document.querySelector("#content").innerHTML = taskFieldTemplate;
 
-    // Рендерим существующие задачи
+    // Рендерим задачи и кнопки
     renderTasks();
     initButtons();
+    initTaskCards();
 
     // ===== User Menu =====
-    const userMenuBtn = document.querySelector(".user-menu__trigger");
     const userMenuList = document.querySelector(".user-menu__dropdown");
-    const arrow = userMenuBtn.querySelector(".user-menu__arrow");
 
     if (appState.currentUser.role === "admin") {
       userMenuList.insertAdjacentHTML(
         "afterbegin",
         `
-      <li class="user-menu__item">
-        <button id="users-admin-btn" class="user-menu__action">
-          Users
-        </button>
-      </li>
+    <li class="user-menu__item">
+      <button id="users-admin-btn" class="user-menu__action">
+        Users
+      </button>
+    </li>
     `,
       );
-    }
 
-    userMenuBtn.addEventListener("click", () => {
-      const isOpen = userMenuList.style.display === "block";
-      userMenuList.style.display = isOpen ? "none" : "block";
-
-      arrow.style.transform = isOpen ? "rotate(-45deg)" : "rotate(135deg)";
-    });
-
-    const usersBtn = document.querySelector("#users-admin-btn");
-
-    if (usersBtn) {
+      const usersBtn = document.querySelector("#users-admin-btn");
       usersBtn.addEventListener("click", () => {
         document.querySelector("#content").innerHTML = usersAdminTemplate;
-
         initUsersAdmin();
       });
     }
+
+    // ===== Кнопка Sign Out =====
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      appState.currentUser = null;
+
+      // Скрываем панель пользователя
+      userPanel.style.display = "none";
+
+      // Показываем форму входа
+      loginForm.classList.remove("d-none");
+
+      // Очищаем доску и возвращаем сообщение
+      document.getElementById("content").innerHTML =
+        "Please Sign In to see your tasks!";
+    });
   } else {
-    document.querySelector("#content").innerHTML = noAccessTemplate;
+    // Всплывающее сообщение при неверных данных
+    alert("Доступ запрещен. Неверный логин или пароль.");
   }
+});
+
+// ======================= MENU USER (КЛИК НА АВАТАР) =======================
+document.addEventListener("click", (e) => {
+  const userMenuBtn = e.target.closest(".user-menu__trigger");
+  if (!userMenuBtn) return;
+
+  const userMenuList = document.querySelector(".user-menu__dropdown");
+  const arrow = userMenuBtn.querySelector(".user-menu__arrow");
+
+  const isOpen = userMenuList.style.display === "block";
+  userMenuList.style.display = isOpen ? "none" : "block";
+  arrow.style.transform = isOpen ? "rotate(-45deg)" : "rotate(135deg)";
 });
