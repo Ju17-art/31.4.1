@@ -2,6 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 import "./styles/kanban.css";
 
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 import taskFieldTemplate from "./templates/taskField.html";
 import taskDetailsTemplate from "./templates/taskDetails.html";
 import usersAdminTemplate from "./templates/usersAdmin.html";
@@ -18,6 +20,34 @@ const loginForm = document.querySelector("#app-login-form");
 generateTestUser(User);
 
 // ======================= ФУНКЦИИ =======================
+
+// ===== Admin Users Menu =====
+function addUsersMenuItemIfAdmin() {
+  if (appState.currentUser?.role === "admin") {
+    const userMenuList = document.querySelector(".user-menu__dropdown");
+    if (!userMenuList) return;
+    // Проверяем, что пункта Users ещё нет
+    if (!document.querySelector("#users-admin-btn")) {
+      userMenuList.insertAdjacentHTML(
+        "afterbegin",
+        `
+      <li class="user-menu__item">
+        <button id="users-admin-btn" class="user-menu__action">
+          Users
+        </button>
+      </li>
+      `,
+      );
+
+      // Навешиваем клик на Users
+      const usersBtn = document.querySelector("#users-admin-btn");
+      usersBtn.addEventListener("click", () => {
+        document.querySelector("#content").innerHTML = usersAdminTemplate;
+        initUsersAdmin();
+      });
+    }
+  }
+}
 
 // ====== Рендер задач ======
 function renderTasks() {
@@ -66,6 +96,8 @@ function renderTasks() {
 
   // <-- добавляем навешивание обработчиков карточек прямо здесь
   initTaskCards();
+
+  addUsersMenuItemIfAdmin();
 }
 
 function initTaskCards() {
@@ -76,6 +108,9 @@ function initTaskCards() {
 
       // Загружаем шаблон страницы задачи
       document.querySelector("#content").innerHTML = taskDetailsTemplate;
+
+      // Добавить пункт Users для админа
+      addUsersMenuItemIfAdmin();
 
       const allTasks = Task.getAll();
 
@@ -95,6 +130,14 @@ function initTaskCards() {
 
       document.querySelector("#task-description").value =
         task.description || "";
+
+      const taskUser = document.querySelector("#task-user");
+
+      if (appState.currentUser?.role === "admin") {
+        taskUser.textContent = `Assigned to: ${task.userId}`;
+      } else {
+        taskUser.textContent = "";
+      }
 
       document.querySelector("#task-description").focus();
 
@@ -175,6 +218,14 @@ function renderUsers() {
 
 function initUsersAdmin() {
   renderUsers();
+
+  document.querySelector("#back-to-board-btn").addEventListener("click", () => {
+    document.querySelector("#content").innerHTML = taskFieldTemplate;
+
+    renderTasks();
+    initButtons();
+    initTaskCards();
+  });
 
   document.querySelector("#add-user-btn").addEventListener("click", () => {
     const login = prompt("Логин");
@@ -276,7 +327,7 @@ function initButtons() {
 
       // Для Backlog — обычная форма
       if (status === "backlog") {
-        form.innerHTML = `<input type="text" class="add-card-input" placeholder="Название задачи" />
+        form.innerHTML = `<input type="text" class="add-card-input" placeholder="New task title" />
           <button class="submit-card-btn">Submit</button>
         `;
         const input = form.querySelector(".add-card-input");
@@ -318,7 +369,7 @@ function initButtons() {
 
         form.innerHTML = `
           <select class="select-task">
-            <option value="">-- Выберите задачу --</option>
+            <option value="">Select a task</option>
             ${options.map((t) => `<option value="${t.id}">${t.title}</option>`).join("")}
           </select>
           <button class="submit-card-btn">Submit</button>
@@ -372,28 +423,6 @@ loginForm.addEventListener("submit", (e) => {
     initButtons();
     initTaskCards();
 
-    // ===== User Menu =====
-    const userMenuList = document.querySelector(".user-menu__dropdown");
-
-    if (appState.currentUser.role === "admin") {
-      userMenuList.insertAdjacentHTML(
-        "afterbegin",
-        `
-    <li class="user-menu__item">
-      <button id="users-admin-btn" class="user-menu__action">
-        Users
-      </button>
-    </li>
-    `,
-      );
-
-      const usersBtn = document.querySelector("#users-admin-btn");
-      usersBtn.addEventListener("click", () => {
-        document.querySelector("#content").innerHTML = usersAdminTemplate;
-        initUsersAdmin();
-      });
-    }
-
     // ===== Кнопка Sign Out =====
     document.getElementById("logout-btn").addEventListener("click", () => {
       appState.currentUser = null;
@@ -426,3 +455,21 @@ document.addEventListener("click", (e) => {
   userMenuList.style.display = isOpen ? "none" : "block";
   arrow.style.transform = isOpen ? "rotate(-45deg)" : "rotate(135deg)";
 });
+
+// ======================= ЗАКРЫТИЕ МЕНЮ ПРИ КЛИКЕ ВНЕ =======================
+document.addEventListener("click", (e) => {
+  const userMenu = e.target.closest(".user-menu");
+
+  if (!userMenu) {
+    const userMenuList = document.querySelector(".user-menu__dropdown");
+    const trigger = document.querySelector(".user-menu__trigger");
+    const arrow = trigger?.querySelector(".user-menu__arrow");
+
+    if (userMenuList && userMenuList.style.display === "block") {
+      userMenuList.style.display = "none";
+      if (arrow) arrow.style.transform = "rotate(-45deg)";
+    }
+  }
+});
+
+

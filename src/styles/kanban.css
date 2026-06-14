@@ -13,14 +13,15 @@
 .page {
   min-height: 100vh;
   padding: 20px;
-
   background-color: #d9d9d9;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* BOARD */
 
 .board {
+  max-width: 1235px;
+  margin: 0 auto;
   background-color: #0079bf;
   color: #ffffff;
 }
@@ -31,9 +32,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 16px 20px;
-
   background-color: #0067a3;
 }
 
@@ -82,47 +81,67 @@
   display: none;
   min-width: 150px;
   list-style: none;
+  padding: 0;
+  margin: 0;
   background-color: #ffffff;
   border-radius: 6px;
-  overflow: hidden;
-
+  overflow: visible;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
 }
 
-/*
-.user-menu:hover .user-menu__dropdown {
-  display: block;
+.user-menu__dropdown::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 74%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  z-index: -1;
 }
-*/
+
+.user-menu__item {
+  list-style: none;
+}
 
 .user-menu__action {
+  display: block;
   width: 100%;
   padding: 12px 16px;
-
   border: none;
   background-color: transparent;
-
   text-align: left;
-
-  transition: background-color 0.2s;
+  cursor: pointer;
 }
 
 .user-menu__action:hover {
   background-color: #ebecf0;
-  cursor: pointer;
+}
+
+.user-menu__item:first-child .user-menu__action {
+  border-radius: 6px 6px 0 0;
+}
+
+.user-menu__item:last-child .user-menu__action {
+  border-radius: 0 0 6px 6px;
 }
 
 /* CONTENT */
 
 .board__content {
   padding: 20px;
+  overflow-x: auto;
 }
 
 .board__columns {
   display: flex;
-  gap: 20px;
-
+  gap: 25px;
   list-style: none;
+  min-width: max-content;
+  margin: 0;
+  padding: 0;
 }
 
 .board__column {
@@ -133,19 +152,14 @@
 
 .column {
   width: 280px;
-
   padding: 12px;
-
   border-radius: 10px;
-
   background-color: #ebecf0;
 }
 
 .column__title {
   margin-bottom: 15px;
-
   color: #000000;
-
   font-size: 18px;
   font-weight: 400;
 }
@@ -156,20 +170,17 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-
   margin-bottom: 16px;
-
   max-height: 400px;
   overflow-y: auto;
-
   list-style: none;
+  padding: 0;
 }
 
 .task-list__item {
   border-radius: 6px;
-
   background-color: #ffffff;
-
+  padding: 0;
   transition:
     background-color 0.2s,
     transform 0.2s;
@@ -178,13 +189,11 @@
 .task-list__item:hover {
   background-color: #dfe9f3;
   cursor: pointer;
-
   transform: translateY(-2px);
 }
 
 .task-card {
   padding: 10px 12px;
-
   color: #000000;
   line-height: 1.4;
 }
@@ -193,12 +202,9 @@
 
 .add-card-button {
   padding: 8px 12px;
-
   border: none;
   border-radius: 6px;
-
   font-size: 16px;
-
   transition:
     background-color 0.2s,
     color 0.2s;
@@ -214,7 +220,6 @@
 .add-card-button--active:hover {
   background-color: #ffffff;
   color: #172b4d;
-
   cursor: pointer;
 }
 
@@ -223,7 +228,6 @@
 .add-card-button--disabled {
   background-color: transparent;
   color: #a5adba;
-
   cursor: default;
 }
 
@@ -233,15 +237,68 @@
   cursor: default;
 }
 
+/* Input */
+
+.add-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: -5px;
+}
+
+.add-card-input {
+  padding: 8px 12px;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #ffffff;
+}
+
+.add-card-input:focus {
+  outline: none;
+  border-color: #0079BF;
+}
+
+/* Submit button */
+
+.submit-card-btn {
+  background-color: #0079BF;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 14px;
+  width: 100px;
+  cursor: pointer;
+}
+
+.submit-card-btn:hover {
+  background-color: #005f8e;
+}
+
+/* Стили для дропдауна (select) */
+.select-task {
+  padding: 12px 8px;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.select-task:focus {
+  outline: none;
+}
+
 /* FOOTER */
 
 .board__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 16px 20px;
-
   background-color: #0067a3;
 }
 
@@ -260,8 +317,8 @@
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 800px;
-  margin: 20px auto;
+  max-width: 1181px;
+  margin: -20px 26px 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -274,7 +331,8 @@
 }
 
 .task-details__title {
-  font-size: 1.5rem;
+  font-size: 24px;
+  color: #000;
   margin: 0;
 }
 
@@ -297,9 +355,16 @@
 
 .task-details__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start; /* кнопки и пользователь в ряд, выравнивание слева */
   gap: 10px;
   margin-top: 15px;
+  align-items: center; /* выровнять по вертикали */
+}
+
+.task-details__user {
+  margin-right: auto; /* толкает кнопки вправо */
+  font-size: 14px;
+  color: #666;
 }
 
 .task-details__save,
@@ -337,4 +402,8 @@
   background: #dc3545;
   color: white;
   cursor: pointer;
+}
+
+.admin-only {
+  display: none;
 }
