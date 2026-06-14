@@ -8,15 +8,6 @@
   padding: 0;
 }
 
-/* PAGE */
-
-.page {
-  min-height: 100vh;
-  padding: 20px;
-  background-color: #d9d9d9;
-  font-family: 'Roboto', sans-serif;
-}
-
 /* BOARD */
 
 .board {
@@ -128,24 +119,23 @@
   border-radius: 0 0 6px 6px;
 }
 
-/* CONTENT */
+/* CONTENT */ 
 
-.board__content {
+.board__content { 
   padding: 20px;
-  overflow-x: auto;
-}
+   overflow-x: auto; 
+  } 
 
-.board__columns {
-  display: flex;
-  gap: 25px;
-  list-style: none;
-  min-width: max-content;
-  margin: 0;
-  padding: 0;
-}
+.board__columns { 
+  display: flex; 
+  gap: 25px; 
+  list-style: none; 
+  min-width: max-content; 
+  margin: 0; padding: 0; 
+} 
 
-.board__column {
-  flex-shrink: 0;
+.board__column { 
+  flex-shrink: 0; 
 }
 
 /* COLUMN */
@@ -355,14 +345,14 @@
 
 .task-details__actions {
   display: flex;
-  justify-content: flex-start; /* кнопки и пользователь в ряд, выравнивание слева */
+  justify-content: flex-start;
   gap: 10px;
   margin-top: 15px;
-  align-items: center; /* выровнять по вертикали */
+  align-items: center;
 }
 
 .task-details__user {
-  margin-right: auto; /* толкает кнопки вправо */
+  margin-right: auto;
   font-size: 14px;
   color: #666;
 }
@@ -406,4 +396,78 @@
 
 .admin-only {
   display: none;
+}
+
+/* МОБИЛЬНЫЕ СТИЛИ */
+@media (max-width: 768px) {
+  .board__content {
+    overflow-x: visible;
+    padding: 50px;
+  }
+
+  .board__columns {
+    flex-direction: column;
+    gap: 50px;
+    min-width: auto;
+  }
+
+  .board__column {
+    width: 100%;
+  }
+
+  .column {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .board__header {
+    flex-direction: column;
+    gap: 12px;
+    background-color: #0079bf;
+}
+
+  .board__title {
+    font-size: 24px;
+    text-align: left;
+  }
+
+  .user-menu {
+  position: relative;
+  margin-left: auto;
+}
+
+  .board__footer {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .board__stats {
+    justify-content: center;
+  }
+
+  /* Карточка задачи на мобильных */
+  .task-details {
+    margin: -30 12px 20px;
+    padding: 16px;
+  }
+
+  .task-details__title {
+    font-size: 20px;
+  }
+
+  .task-details__actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* Для планшетов (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1235px) {
+  .board {
+    margin: 0 20px;
+  }
+  
+  .board__content {
+    overflow-x: auto;
+  }
 }

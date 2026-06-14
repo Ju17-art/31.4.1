@@ -49,7 +49,7 @@ export class Task {
       // меняем статус
       task.status = newStatus;
 
-      // кладём в конец массива
+      // кладем в конец массива
       tasks.push(task);
 
       localStorage.setItem("tasks", JSON.stringify(tasks));

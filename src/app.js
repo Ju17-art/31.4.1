@@ -94,7 +94,7 @@ function renderTasks() {
   // Обновляем состояние кнопок
   updateAddButtonState();
 
-  // <-- добавляем навешивание обработчиков карточек прямо здесь
+  // <-- добавляем навешивание обработчиков карточек
   initTaskCards();
 
   addUsersMenuItemIfAdmin();
@@ -109,7 +109,7 @@ function initTaskCards() {
       // Загружаем шаблон страницы задачи
       document.querySelector("#content").innerHTML = taskDetailsTemplate;
 
-      // Добавить пункт Users для админа
+      // Добавляем пункт Users для админа
       addUsersMenuItemIfAdmin();
 
       const allTasks = Task.getAll();
@@ -149,7 +149,7 @@ function initTaskCards() {
 
           renderTasks();
           initButtons();
-          initTaskCards(); // <-- навесили клики снова
+          initTaskCards();
         });
 
       // Сохранить описание
@@ -172,7 +172,7 @@ function initTaskCards() {
 
             renderTasks();
             initButtons();
-            initTaskCards(); // <-- навесили клики снова
+            initTaskCards();
           }
         });
     });
@@ -443,7 +443,7 @@ loginForm.addEventListener("submit", (e) => {
   }
 });
 
-// ======================= MENU USER (КЛИК НА АВАТАР) =======================
+// MENU USER (КЛИК НА АВАТАР)
 document.addEventListener("click", (e) => {
   const userMenuBtn = e.target.closest(".user-menu__trigger");
   if (!userMenuBtn) return;
@@ -456,7 +456,7 @@ document.addEventListener("click", (e) => {
   arrow.style.transform = isOpen ? "rotate(-45deg)" : "rotate(135deg)";
 });
 
-// ======================= ЗАКРЫТИЕ МЕНЮ ПРИ КЛИКЕ ВНЕ =======================
+// ЗАКРЫТИЕ МЕНЮ ПРИ КЛИКЕ ВНЕ
 document.addEventListener("click", (e) => {
   const userMenu = e.target.closest(".user-menu");
 
